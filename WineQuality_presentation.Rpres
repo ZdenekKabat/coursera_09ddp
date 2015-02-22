@@ -1,0 +1,74 @@
+Wine Quality Prediction
+========================================================
+author: Zdenek Kabat
+date: 22 February 2015
+transition: rotate
+
+Project goal
+========================================================
+
+This is a course project for Coursera Developing Data Product class as a part
+of Data Science specialization. The project comprises two parts:
+- `shiny` application - see [shinyapps.io](http://zkabat.shinyapps.io/WineQualityPrediction/)
+- RStudio Presenter presenation (this file)
+
+The goal of this project is to create a simple interactive `shiny` application
+with included predictive model and deliver its description in a presentation.
+
+
+Data source description
+========================================================
+
+<small>The project uses Wine Quality Data Set from UCI Machine Learning repository ([link](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)) to classify red and white wines from Portugal based on physiocochemical tests. The attributes are:
+
+- Fixed / volatile acidity
+- Citric acid
+- Residual sugar
+- Chlorides
+- Free / total sulfur dioxide
+- Density
+- pH
+- Sulphates
+- Alcohol
+
+</small>
+
+Application details
+========================================================
+
+The `shiny` application contains:
+
+- **Interactive inputs:** 
+    - radio button for red/white wine selection,
+    - sliders for attribute value settings,
+    - roll-down menus for plot axes setting.
+- **Interactive outputs:** 
+    - summary of a predictive model,
+    - prediction of wine quality in terms of RF voting, 
+    - scatterplot of wine attributes.
+
+Technical details
+========================================================
+
+<small>
+Wine quality data were used to calibrate a random forest classification model. 
+Here we show an example of white wine model:
+
+```{r echo = FALSE, results = FALSE}
+library(randomForest)
+wineWhite <- read.csv('./winequality-white.csv', sep = ";")
+wineWhite$quality <- as.factor(wineWhite$quality)
+set.seed(1234)
+```
+
+```{r code1, cache = TRUE}
+modRF.white <- randomForest(quality ~ ., data = wineWhite, ntree = 200, importance = TRUE)
+```
+
+The model accuracy and confusion matrix are the following:
+
+```{r code2, echo = FALSE}
+paste(round(modRF.white$err.rate[200, 1]*100, 2), "%")
+modRF.white$confusion
+```
+</small>
